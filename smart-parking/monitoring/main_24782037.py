@@ -11,8 +11,8 @@ Tanggal: 26 Maret 2025
 
 import sys
 import os
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from simulator.parking_simulator import (
     tambah_slot_parkir,
@@ -20,7 +20,6 @@ from simulator.parking_simulator import (
     kendaraan_keluar,
     cek_status_parkir
 )
-
 
 def main():
     """
@@ -38,16 +37,17 @@ def main():
 
         if pilihan == '1':
             try:
-                jumlah_input = input(
-                    "Masukkan jumlah slot parkir yang ingin ditambahkan: "
-                )
-                jumlah = int(jumlah_input)
-                tambah_slot_parkir(jumlah)
-            except ValueError:
-                print("Input tidak valid. Harus berupa angka.")
+                jumlah = int(input("Masukkan jumlah slot: "))
+                jenis = input("Jenis slot untuk apa? (2/4 roda): ")
+                if jenis not in ['2', '4']:
+                    raise ValueError("Jenis slot tidak valid.")
+                tambah_slot_parkir(jumlah, jenis)
+            except ValueError as e:
+                print(f"Kesalahan input: {e}")
         elif pilihan == '2':
             nomor = input("Masukkan nomor kendaraan: ")
-            parkir_kendaraan(nomor)
+            jenis = input("Jenis kendaraan? (2/4 roda): ")
+            parkir_kendaraan(nomor, jenis)
         elif pilihan == '3':
             nomor = input("Masukkan nomor kendaraan yang akan keluar: ")
             kendaraan_keluar(nomor)
