@@ -3,7 +3,8 @@ Nama file: main_24782037.py
 
 Deskripsi:
     Program utama Smart Parking dengan menu interaktif untuk menambah slot,
-    memarkir kendaraan, mengeluarkan kendaraan, dan mengecek status parkir.
+    memarkir kendaraan, mengeluarkan kendaraan, mengecek status parkir, dan
+    menampilkan riwayat parkir menggunakan generator.
 
 Penulis: Anisa Dwi Ramahdani
 Tanggal: 26 Maret 2025
@@ -25,6 +26,7 @@ from simulator.parking_simulator import (
 # Riwayat parkir kendaraan
 riwayat = []
 
+
 class Vehicle:
     def __init__(self, nomor, entry_time):
         self.nomor = nomor
@@ -38,12 +40,23 @@ class Vehicle:
         keluar = self.exit_time.strftime("%Y-%m-%d %H:%M:%S") if self.exit_time else "Belum keluar"
         return f"{self.nomor} | Masuk: {self.entry_time.strftime('%Y-%m-%d %H:%M:%S')} | Keluar: {keluar}"
 
+
+# Generator untuk riwayat
+def generate_riwayat(riwayat_list):
+    for kendaraan in riwayat_list:
+        yield kendaraan
+
+
 def tampilkan_riwayat_parkir():
     print("\n=== Riwayat Parkir ===")
     if not riwayat:
         print("Belum ada kendaraan yang masuk.")
-    for kendaraan in riwayat:
-        print(kendaraan)
+    else:
+        print("Generate Riwayat Parkir:")
+        generator = generate_riwayat(riwayat)
+        for kendaraan in generator:
+            print(kendaraan)
+
 
 def main():
     """
@@ -51,7 +64,7 @@ def main():
     fitur-fitur parkir sesuai pilihan pengguna.
     """
     while True:
-        print("\n=== SMART PARKING SYSTEM ===")
+        print("\n========== SMART PARKING SYSTEM ==========")
         print("1. Tambah Slot Parkir")
         print("2. Masuk Parkir")
         print("3. Keluar Parkir")
@@ -63,8 +76,8 @@ def main():
         if pilihan == '1':
             try:
                 jumlah = int(input("Masukkan jumlah slot: "))
-                jenis = input("Jenis slot untuk apa? (2/4 roda): ")
-                if jenis not in ['2', '4']:
+                jenis = input("Jenis slot untuk apa? (motor/mobil): ")
+                if jenis not in ['motor', 'mobil']:
                     raise ValueError("Jenis slot tidak valid.")
                 tambah_slot_parkir(jumlah, jenis)
             except ValueError as e:
@@ -72,7 +85,7 @@ def main():
 
         elif pilihan == '2':
             nomor = input("Masukkan nomor kendaraan: ")
-            jenis = input("Jenis kendaraan? (2/4 roda): ")
+            jenis = input("Jenis kendaraan? (motor/mobil): ")
             tahun = input("Masukkan tahun masuk (YYYY): ")
             bulan = input("Masukkan bulan masuk (MM): ")
             tanggal = input("Masukkan tanggal masuk (DD): ")
